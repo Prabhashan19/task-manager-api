@@ -105,3 +105,23 @@ For updating a task (`PUT`):
     "status": true
 }
 ````
+
+
+
+## AI Task - Auto-Categorization Improvements
+
+The current project implements a simple, keyword-based function (`autoCategorizeTask`) to automatically categorize tasks. While functional for this test, this approach has limitations:
+
+-   It is rigid and can only identify the exact keywords in its hardcoded lists.
+-   It does not understand context (e.g., "book a flight" might be personal, while "read a book about programming" is learning).
+-   The keyword lists would require constant manual maintenance to remain effective.
+
+**Improvement with a Real AI API (e.g., OpenAI):**
+
+Given an AI API like OpenAI's, this feature could be made significantly more powerful and intelligent. Instead of simple keyword matching, the process would be:
+
+1.  When a task is created, its `task_name` and `description` would be sent to the OpenAI API endpoint.
+2.  The request would include a carefully crafted prompt, such as: *"Based on the following task, classify it into one of these categories: Work, Personal, Learning, or Other. Task Name: [task_name], Description: [description]"*
+3.  The AI model would analyze the *semantic meaning* of the text and return the most appropriate category as a response.
+
+This AI-powered approach would be far more accurate, flexible, and require no manual keyword updates, providing a vastly superior user experience.
