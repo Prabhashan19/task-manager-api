@@ -71,6 +71,18 @@ This is a simple RESTful API for managing tasks, built with Laravel 11 as part o
 
 ---
 
+## Optional Frontend
+
+This project includes a simple Blade/HTML/JS frontend to demonstrate the API in action.
+
+Once you have the server running, simply navigate to the root URL in your web browser to use the interface:
+
+-   **URL:** `http://127.0.0.1:8000`
+
+You can view, add, and delete tasks from this page.
+
+---
+
 ## API Usage & Endpoints
 
 **Authentication:**
@@ -106,8 +118,6 @@ For updating a task (`PUT`):
 }
 ````
 
-
-
 ## AI Task - Auto-Categorization Improvements
 
 The current project implements a simple, keyword-based function (`autoCategorizeTask`) to automatically categorize tasks. While functional for this test, this approach has limitations:
@@ -121,7 +131,67 @@ The current project implements a simple, keyword-based function (`autoCategorize
 Given an AI API like OpenAI's, this feature could be made significantly more powerful and intelligent. Instead of simple keyword matching, the process would be:
 
 1.  When a task is created, its `task_name` and `description` would be sent to the OpenAI API endpoint.
-2.  The request would include a carefully crafted prompt, such as: *"Based on the following task, classify it into one of these categories: Work, Personal, Learning, or Other. Task Name: [task_name], Description: [description]"*
-3.  The AI model would analyze the *semantic meaning* of the text and return the most appropriate category as a response.
+2.  The request would include a carefully crafted prompt, such as: _"Based on the following task, classify it into one of these categories: Work, Personal, Learning, or Other. Task Name: [task_name], Description: [description]"_
+3.  The AI model would analyze the _semantic meaning_ of the text and return the most appropriate category as a response.
 
 This AI-powered approach would be far more accurate, flexible, and require no manual keyword updates, providing a vastly superior user experience.
+
+---
+
+## AI Knowledge Task Submission
+
+This section provides the isolated function and test cases as required by the AI Knowledge Task.
+
+### Function Code
+
+The following PHP function takes a task array (containing `task_name` and `description`) and returns a category string based on keyword matching.
+
+```php
+function autoCategorizeTask($task)
+{
+    // Define keywords for each category
+    $workKeywords = ['laravel', 'project', 'api', 'endpoints', 'authentication', 'meeting', 'work'];
+    $personalKeywords = ['gym', 'buy', 'groceries', 'doctor', 'personal', 'book flight'];
+    $learningKeywords = ['learn', 'book', 'tutorial', 'read', 'study'];
+
+    // Combine task name and description into a single string for searching
+    $textToSearch = strtolower($task['task_name'] . ' ' . $task['description']);
+
+    // Check for keywords in order of priority
+    foreach ($workKeywords as $keyword) {
+        if (str_contains($textToSearch, $keyword)) {
+            return 'Work';
+        }
+    }
+
+    foreach ($personalKeywords as $keyword) {
+        if (str_contains($textToSearch, $keyword)) {
+            return 'Personal';
+        }
+    }
+
+    foreach ($learningKeywords as $keyword) {
+        if (str_contains($textToSearch, $keyword)) {
+            return 'Learning';
+        }
+    }
+
+    // If no keywords are found, default to 'Other'
+    return 'Other';
+}
+
+// Test Case 1: Matches a 'Work' keyword
+$task1 = ['task_name' => 'Finish Laravel project', 'description' => 'Complete API endpoints'];
+echo autoCategorizeTask($task1); // Expected Output: 'Work'
+
+// Test Case 2: Matches a 'Personal' keyword
+$task2 = ['task_name' => 'Go to the gym', 'description' => 'Leg day workout'];
+echo autoCategorizeTask($task2); // Expected Output: 'Personal'
+
+// Test Case 3: Matches a 'Learning' keyword
+$task3 = ['task_name' => 'Read a new book', 'description' => 'A book on software architecture'];
+echo autoCategorizeTask($task3); // Expected Output: 'Learning'
+
+// Test Case 4: No keywords match
+$task4 = ['task_name' => 'Water the plants', 'description' => 'The ones on the balcony'];
+echo autoCategorizeTask($task4); // Expected Output: 'Other'
