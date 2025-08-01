@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Task; // <-- Import the Task model
-use Illuminate\Support\Facades\Validator; // <-- Import the Validator
+use App\Models\Task; // <-- Importing the Task model
+use Illuminate\Support\Facades\Validator; // <-- Importing the Validator
 
 class TaskController extends Controller
 {
@@ -25,7 +25,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the incoming request data
+        // Validating the incoming request data
         $validator = Validator::make($request->all(), [
             'task_name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -36,9 +36,19 @@ class TaskController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        // Create and save the new task
+        // Creating the task
         $task = Task::create($validator->validated());
 
+        // Get the validated data as an array for the categorization function
+        $taskData = $validator->validated(); // Automatically categorize the task based on its name and description
+
+        // Call the categorization function
+        $category = $this->autoCategorizeTask($taskData);
+
+        // Add the category to the task object before returning it
+        $task->category = $category;
+
+        
         // Return the new task with a 201 Created status code
         return response()->json($task, 201);
     }
@@ -104,5 +114,38 @@ class TaskController extends Controller
 
         // Return a 204 No Content response to indicate successful deletion
         return response()->json(null, 204);
+    }
+
+    private function autoCategorizeTask($task)
+    {
+        // Defining keywords for each category
+        $workKeywords = ['laravel', 'project', 'api', 'endpoints', 'authentication', 'meeting'];
+        $personalKeywords = ['gym', 'buy', 'personal', 'doctor'];
+        $learningKeywords = ['learn', 'book', 'tutorial', 'read'];
+
+        // Combining task name and description into a single string for searching
+        $textToSearch = strtolower($task['task_name'] . ' ' . $task['description']);
+
+        // Checking for keywords in order of priority
+        foreach ($workKeywords as $keyword) {
+            if (str_contains($textToSearch, $keyword)) {
+                return 'Work';
+            }
+        }
+
+        foreach ($personalKeywords as $keyword) {
+            if (str_contains($textToSearch, $keyword)) {
+                return 'Personal';
+            }
+        }
+
+        foreach ($learningKeywords as $keyword) {
+            if (str_contains($textToSearch, $keyword)) {
+                return 'Learning';
+            }
+        }
+
+        // If no keywords are found, default to 'Other'
+        return 'Other';
     }
 }
