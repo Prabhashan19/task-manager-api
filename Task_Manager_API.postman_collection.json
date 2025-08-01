@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "e92ca42a-9b69-42ec-89c4-35a5d9fa937b",
+		"name": "Task Manager API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47245908",
+		"_collection_link": "https://madurawaladineth-1217451.postman.co/workspace/Prabhashan-Madurawala's-Workspa~ac15ca21-5437-46c0-85ae-89f84aa7da36/collection/47245908-e92ca42a-9b69-42ec-89c4-35a5d9fa937b?action=share&source=collection_link&creator=47245908"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:8000/api/tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/tasks",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"tasks"
+					]
+				},
+				"description": "Test to check whether the security works."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/tasks",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "testtoken123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"task_name\": \"Finish the Laravel project\",\r\n    \"description\": \"I need to complete the API endpoints for this test.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/tasks",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"tasks"
+					]
+				},
+				"description": "Checking whether if we can create data."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/tasks",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "testtoken123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/tasks",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"tasks"
+					]
+				},
+				"description": "Get All Tasks."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/tasks/2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "testtoken123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/tasks/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"tasks",
+						"2"
+					]
+				},
+				"description": "Update Task Status."
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/tasks/3",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "testtoken123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/tasks/3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"tasks",
+						"3"
+					]
+				},
+				"description": "Delete Task."
+			},
+			"response": []
+		}
+	]
+}
